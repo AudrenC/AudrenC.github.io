@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évaluation du potentiel technique présent et futur de l'éolien terrestre en Allemagne</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">Focus</h1>
+        </div>
+    </header>
+
+    <main class="article-page">
+        <a href="../index.html" class="back-link">← Retour à la liste des projets </a>
+
+        <article class="article-header">
+            <h1>Évaluation du potentiel technique présent et futur de l'éolien terrestre en Allemagne</h1>
+            <div class="article-meta">
+                <span class="article-meta-item">🏙️ Chaire des Systèmes Énergétiques, Munich</span>
+                <span class="article-meta-item">⚙️ Python, PostgreSQL, GeoPandas, QGIS</span>
+            </div>
+            <img src="..\images\photographics-windmill.jpg" alt="Wind turbines" class="article-featured-image">
+        </article>
+
+        <nav class="table-of-contents">
+            <h3> SOMMAIRE </h3>
+                <ul>
+                    <li class="toc-level-2"><a href="#sec-contexte">Contexte</a></li>
+                    <li class="toc-level-2"><a href="#sec-potentiel">Qu'est-ce que le potentiel technique ?</a></li>
+                    <li class="toc-level-2"><a href="#sec-modelisation">Modélisation</a>
+                <ul>
+                    <li class="toc-level-3"><a href="#subsec-ressource">La ressource éolienne</a></li>
+                    <li class="toc-level-3"><a href="#subsec-sillage">L'effet de sillage</a></li>
+                    <li class="toc-level-3"><a href="#subsec-grille">Création de la base de données</a></li>
+                    <li class="toc-level-3"><a href="#subsec-eolienne">Éolienne et courbe de puissance</a></li>
+                    <li class="toc-level-3"><a href="#subsec-prod">Production annuelle d'énergie</a></li>
+                    <li class="toc-level-3"><a href="#subsec-algobb">Algorithme itératif classique</a></li>
+                    <li class="toc-level-3"><a href="#subsec-algogen">Algorithme génétique</a></li>
+                    <li class="toc-level-3"><a href="#subsec-opti">Optimisation</a></li>
+                </ul>
+                    <li class="toc-level-2"><a href="#sec-resultats">Résultats clés</a>
+                
+                <ul>
+                    <li class="toc-level-3"><a href="#subsec-vs">Algorithme classique vs génétique</a></li>
+                    <li class="toc-level-3"><a href="#subsec-compac">Étude de la compacité, un indicateur ?</a></li>
+                    <li class="toc-level-3"><a href="#subsec-res">Évaluation du potentiel technique de l'éolien terrestre en Allemagne</a></li>
+                </ul>
+                <li class="toc-level-2"><a href="#sec-biblio">Sources</a></li>
+                </ul>
+        </nav>
+
+        <article class="article-body">
+
+            <h2 id="sec-contexte">Contexte</h2>
+            <p>
+                L'Allemagne s'est engagée sur la voie d'une transition énergétique ambitieuse, en visant notamment
+                la neutralité carbone d'ici 2045 <a href="#ref-1" class="citation">[1]</a>. La politique du "Tournant énergétique" ("Energiewende") repose en partie 
+                sur le développement massif des énergies renouvelables pour :
+                <ul>
+                <li> Compenser la fin programmée des centrales à charbon en 2038 <a href="#ref-2" class="citation">[2]</a></li>
+                <li> Réduire les émissions de CO2 du secteur de l'énergie qui comptaient encore en 2022 pour plus d'un tiers du total des émissions nationales <a href="#ref-3" class="citation">[3]</a></li>
+                </ul> 
+                Ces émissions ont même augmenté de 4,5% en 2022, principalement en raison de la crise énergétique liée à la guerre en Ukraine et
+                l'augmentation concomittante de l'utilisation du charbon et du pétrole pour remplacer le gaz russe <a href="#ref-4" class="citation">[4]</a>. Dans ce contexte, l'éolien terrestre joue un rôle crucial 
+                dans la stratégie énergétique allemande, à la fois pour atteindre les objectifs environnementaux et pour développer une plus grande indépendance énergétique. 
+            </p>
+            <p>
+                Cependant, le potentiel de cette ressource reste incertain, notamment en raison de contraintes réglementaires, environnementales et sociales. Il est
+                donc essentiel de l'évaluer de manière rigoureuse pour aider à orienter les politiques publiques et les investissements privés. Certains objectifs ambitieux
+                ont déjà été fixés, comme celui désigner 2% du territoire fédéral comme zone réservée à l'éolien terrestre d'ici 2032 <a href="#ref-5" class="citation">[5]</a>. L'étude du potentiel permet d'apporter
+                un retour chiffré sur la faisabilité de ces objectifs et d'identifier des leviers d'action pour les atteindre.
+                
+            </p>
+            <p>
+                C'est dans ce contexte que la Chaire des Systèmes Énergétiques de l'Université Technique de Munich m'a chargé d'évaluer le potentiel technique présent et futur de 
+                l'éolien terrestre en Allemagne, en utilisant des données géospatiales et des modèles de production énergétique. L'objectif était de fournir une estimation 
+                réaliste de la contribution que l'éolien terrestre pourrait apporter à la transition énergétique allemande, en tenant compte des différentes contraintes 
+                et opportunités du territoire. Cette mission a duré de Mai à Décembre 2025 et a impliqué une collaboration avec plusieurs chercheurs, experts du domaine. La thèse a été écrite en anglais, ce qui explique la présence de termes dans cette langue dans certaines images et références.
+            </p>
+
+            <div id="image-1" class="image-container">
+                <img src="..\images\brandenbourg-relevant-zones.png" alt="Brandenburg relevant zones">
+                <p class="image-caption">Fig1 : Zones pertinentes pour le développement de l'énergie éolienne en Brandebourg</p>
+            </div>
+
+            <p>
+                Au cours d'un travail précédant le mien, les zones disponibles en Allemagne pour l'installation de parcs éoliens avaient été identifiées, à l'aide 
+                d'une modélisation spatiale par superposition de différentes couches d'information géographique sur QGIS. Un <a href="#image-1" class="image-ref">exemple</a> est
+                donné ci-dessus pour l'état fédéral du Brandenbourg dans le nord-est du pays, qui est l'une des régions les plus propices au développement de l'éolien terrestre en raison de ses conditions de vent favorables 
+                et de sa faible densité de population. Cependant, ces zones n'avaient pas encore été évaluées en termes de potentiel de production énergétique. 
+                Mon travail a consisté à combiner ces données géospatiales avec des données météorologiques et des modèles d'éoliennes, puis à simuler l'installation de parcs éoliens dans ces zones
+                pour enfin estimer la production énergétique annuelle résultante.
+
+            <h2 id="sec-potentiel">Qu'est-ce que le potentiel technique ?</h2>
+            <p>
+                En considérant une ressource énergétique, le potentiel technique correspond à la quantité maximale d'énergie qui pourrait être produite à partir de celle-ci, 
+                en tenant compte des contraintes techniques et réglementaires. Il s'agit d'une estimation théorique qui suppose que toutes les conditions nécessaires à 
+                l'exploitation de la ressource sont réunies, à l'exception des contraintes économiques et sociales. Le potentiel technique est souvent utilisé comme une 
+                première étape préalable à l'évaluation du potentiel économique.
+            </p>
+            <p>
+                Dans le cas de l'éolien terrestre, le potentiel technique est déterminé en identifiant tout d'abord les zones d'un territoire où il serait possible d'installer 
+                des éoliennes, en tenant compte de critères tels que la vitesse du vent, la topographie, les restrictions environnementales et les réglementations locales. 
+                Puis, au vu de l'état de l'art des technologies éoliennes, on estime la quantité d'énergie qui pourrait être produite à partir de toutes ces zones. 
+            </p>
+            <h2 id="sec-modelisation">Modélisation</h2>
+
+            <h3 id="subsec-ressource">La ressource éolienne </h3>
+
+                La ressource éolienne varie en fonction du temps et de l'espace. Pour un lieu et une altitude donnés, les deux variables
+                d'intérêt sont la vitesse du vent et sa direction. Pour un calcul annuel, il est nécessaire d'établir leur évolution au cours du temps.
+                <ul>
+                <li> Fréquence d'apparition d'une vitesse modélisée à l'aide de la distribution de Weibull:
+                    <div class="math-block">
+                    $$f(v\geq0)=\frac{k}{A}\left(\frac{v}{A}\right)^{k-1}\exp\left(-\left(\frac{v}{A}\right)^k\right)$$
+                    </div>
+                    Où $v$ est la vitesse du vent, $k$ est le paramètre de forme, et $A$ est le paramètre d'échelle. Ces deux paramètres dépendent du lieu et de l'altitude, et sont généralement estimés à partir de données météorologiques historiques. $A$ est lié à la vitesse moyenne du vent, un coefficient $A$ important renseigne sur la qualité du gisement éolien, tandis que $k$ est lié à la variabilité du vent, un coefficient $k$ faible indique une grande variabilité et donc une plus grande incertitude dans la production énergétique.
+                </li>
+                <li> Fréquence d'apparition d'une direction modélisée à l'aide d'une rose des vents, divisée en 12 secteurs. À chaque secteur est associée une probabilité. Ces données sont disponibles en libre accès en format csv sur le site Global Wind Atlas géré par des chercheurs de l'université danoise DTU. 
+                </li>
+                </ul> 
+                Le projet QuWind100 <a href="#ref-6" class="citation">[6]</a> réalisé par l'Université technique de Delft and le Deutscher Wetterdienst propose, entre autres, des données relatives au vent pour l'ensemble de l'Allemagne. Un des jeux de données est constitué de paramètres $A$ et $k$ donnés avec une résolution spatiale horizontale d'1 km. Il a été réalisé sur la base de méthodes micro- et mésoscopiques et de données historiques s'étalant sur 40 ans de 1980 à 2020 fournies par le service Météo. Les auteurs proposent également une extrapolation future des paramètres jusqu'en 2050. Ce jeu de données est utilisé dans ce travail.
+
+            <h3 id="subsec-sillage">L'effet de sillage </h3>
+
+            <p>
+                L'effet de sillage correspond à la diminution de la vitesse du vent derrière une éolienne, ce qui peut réduire la production d'énergie des éoliennes situées en aval. Dans une étude menée par Barthelmie et al. <a href="#ref-7" class="citation">[7]</a> sur les parcs éoliens maritimes Nysted et Horns Rev, une <a href="#image-2" class="image-ref">baisse jusqu'à 35% de la production</a> a été observée en aval.
+            </p> 
+            <div id="image-2" class="image-container">
+                <img src="..\images\barthelmie-power-drop.png" alt="power drop">
+                <p class="image-caption">Fig2 : Chute de puissance dûe à l'effet de sillage, observée par Barthelmie et al. </p>
+            </div>
+            <p>
+                Pour modéliser cet effet, j'ai utilisé un modèle de sillage basé sur la théorie de Jensen-Park, qui permet d'estimer la réduction de la vitesse du vent en fonction de la distance entre les éoliennes et de leurs caractéristiques (taille, puissance, etc.). Ce modèle m'a permis d'ajuster les estimations de production énergétique en tenant compte des interactions entre les éoliennes dans un parc éolien.
+            </p>
+            <p> 
+                Par exemple, dans le cas d'une éolienne $j$ située en aval de $n$ autres éoliennes, la vitesse réelle $v_j$ par rapport à la vitesse $v_0$ en l'absence d'effet de sillage est donnée par la formule:
+            <div class="math-block">
+                $$v_j = v_0\left(1-\sqrt{\sum_{i\neq j}^n\left(1-\frac{1-\sqrt{1-C_T}}{(1+\alpha x_{ij}/r)^2}\right)}\right)$$
+            </div>
+                Où $x_{ij}$ est la distance entre les éoliennes $i$ et $j$, $C_T$ le coefficient de poussée et $\alpha$ le coefficient d'expansion du sillage, sa valeur par défaut est 0.075 pour des éoliennes terrestres. La modélisation du coefficient de poussée est complexe et est réalisée dans ce travail à l'aide d'une méthode empirique basée sur données expérimentales, non présentée ici pour des raisons de concision. Une valeur par défaut de 0.8 peut être utilisée pour une estimation rapide.
+                
+            </p>
+            <p>
+                Les hypothèse essentielles de ce modèle sont les suivantes :
+                <ul>
+                <li> Une croissance linéaire unidimensionnelle du sillage </li>
+                <li> La conservation de la quantité de mouvement </li>
+                <li> Les éoliennes d'une région donnée sont d'un design similaire et pivotent de façon à toujours faire face au vent </li>
+                </ul> 
+            </p>
+            <p>
+                Le cas où une éolienne n'est que partiellement couverte par le sillage d'une autre éolienne en amont est également pris
+                en compte en utilisant un coefficient de recouvrement calculé à partir de la géométrie des éoliennes et de leur position relative, comme montré dans la <a href="#image-3" class="image-ref">figure ci-dessous</a> (WT="Éolienne", Wake = "Sillage").
+            </p>
+            <div id="image-3" class="image-container">
+                <img src="..\images\affected-red.png" alt="Zone touchée">
+                <p class="image-caption">Fig3 : Détermination géométrique du coefficient de recouvrement. </p>
+            </div>
+                Finalement, au moyen d'un calcul vectorisé 3D pour déterminer les grandeurs d'intérêt comme la distance entre les éoliennes, on peut estimer sur la base d'un jeu de coordonnées spatiales l'impact de l'effet de sillage. L'altitude est prise en compte dans le cas du recouvrement en profitant de la symétrie du problème. Quelques exemples à altitudes égales pour plusieurs directions de vent sont présentés ci-dessous. 
+            <div id="image-4" class="image-container">
+                <img src="..\images\farm-120-wake.png" alt="Vent 120">
+                <p class="image-caption">Fig4 : Schéma de l'impact de l'effet de sillage, Vent Sud-Est. </p>
+            </div>
+            <div id="image-5" class="image-container">
+                <img src="..\images\farm-270-wake.png" alt="Vent 270">
+                <p class="image-caption">Fig5 : Schéma de l'impact de l'effet de sillage, Vent Ouest. </p>
+            </div>
+
+
+            <h3 id="subsec-grille">Création de la base de données </h3>
+
+            <p> 
+                Les données géospatiales à ma disposition sont des polygones vectorisés, difficiles à manipuler pour faire du calcul de potentiel énergétique. J'ai donc dû les convertir en une grille régulière de points, chacun représentant un emplacement potentiel pour une éolienne. À chaque point sont associées la longitude et la latitude, ainsi que les différentes caractéristiques du site (vitesse du vent, altitude, etc.) extraites du jeu de données QuWind100. J'ai utilisé la bibliothèque Python GeoPandas pour effectuer cette conversion et manipuler les données géospatiales. En utilisant également une extension PostGIS pour stocker des données géospatiales et effectuer des requêtes type SQL, j'ai pu créer une base de données relationnelle qui facilite l'accès et l'analyse des données. Cette <a href="#image-3" class="image-ref">base de données</a> a été utilisée pour simuler l'installation de parcs éoliens dans les zones identifiées. En effet, elle est ensuite manipulable par Python, ce qui est utile pour la répartition des éoliennes et le calcul de la production énergétique.
+                <div id="image-6" class="image-container">
+                <img src="..\images\database.png" alt="base de données">
+                <p class="image-caption">Fig6 : Échantillon de la base de données, avec coordonées spatiales et coefficients d'intérêt à différentes altitudes  </p>
+                </div>
+                Pour créer une disposition particulière, il suffit d'ajouter une colonne binaire à la base de données, indiquant si une éolienne est installée ou non à l'emplacement correspondant. Par exemple, pour une disposition de 4 éoliennes, on peut ajouter une colonne "turbine" avec des valeurs 1 pour les emplacements où une éolienne est installée et 0 pour les autres. 
+            </p>
+            
+            <h3 id="subsec-eolienne">Éolienne et courbe de puissance </h3>
+
+            <p>
+            Dans le cadre précis de cette étude, seule la courbe de puissance de l'éolienne, le diamètre de son rotor et la hauteur de son mât sont nécessaires. 
+            </p>
+            <P>
+            La courbe de puissance donne la valeur théorique de production électrique en fonction de la vitesse du vent sur site. Un exemple classique est montré ci-dessous:
+            <div id="image-7" class="image-container">
+                <img src="..\images\power-ref.png" alt="courbe de puissance">
+                <p class="image-caption">Fig7: Exemple de courbe de puissance classique  </p>
+            </div>
+            <ul>
+                <li> Le diamètre et la hauteur sont des valeurs publiques pour la majorité des éoliennes</li>
+                <li> La courbe de puissance est rarement donnée par les fabriquants, il est possible de la modéliser à partir de valeurs publiques comme le pouvoir nominal $P_{rated}$, la vitesse d'enclenchement $v_{cutin}$, la vitesse nominale $v_{rated}$, et la vitesse de coupure $v_{cutoff}$. Une courbe de puissance classique peut alors être calculée à l'aide du schéma:
+                <div id="image-8" class="image-container">
+                <img src="..\images\power-law.png" alt="schéma courbe de puissance">
+                <p class="image-caption">Fig8 : Schéma courant pour calculer une courbe de puissance  </p>
+                </li>
+            </ul> 
+
+            Cette courbe est néanmoins idéale, elle ne prend pas en compte les effets aérodynamiques, tels que les turbulences ou les gradients de vitesse potentiels le long des pales. Enfin, elle suppose que la turbine réagit immédiatement à la variation de la vitesse du vent, or les capteurs de vitesse du vent ont une certaine inertie, ce qui peut entraîner un décalage temporel entre la variation de la vitesse du vent et la réponse de la turbine. Une proposition pour une courbe de puissance plus réaliste est présentée dans l'étude de Ryberg et al. <a href="#ref-8" class="citation">[8]</a>, qui propose une transfomation de la courbe au moyen d'un filtre gaussien. Le résultat est présenté ci-dessous:
+            </p>
+            <div id="image-9" class="image-container">
+                <img src="..\images\power-gauss.png" alt="courbe de puissance réaliste">
+                <p class="image-caption">Fig9 : Courbe de puissance plus réaliste, proposée par Ryberg et al. </p>
+            </div>
+            <p> Voici également un exemple de caractéristiques disponibles sur les sites des fabricants:</p>
+            <div id="image-10" class="image-container">
+                <img src="..\images\specs-wt.png" alt="Caractéristisques éolienne">
+                <p class="image-caption">Fig10 : Caractéristiques des éoliennes les plus installées en Allemagne en 2024 </p>
+            </div>
+            
+            <h3 id="subsec-prod"> Production énergétique annuelle </h3>
+            <p>
+            Elle est calculée de la manière suivante:
+            <div class="math-block">
+                $$\text{Production}(\textit{N turbines})= \frac{8760}{10^6}\sum^N_{i=1}\sum^{360^{\circ}}_{dir=0^{\circ}}\sum^{cutoff}_{v=cutin} \text{Power}(\text{Jensen}(v,dir,i))\times f(dir)\times f(v)$$
+            </div>
+            Où la fonction Jensen renvoie la vitesse réelle en prenant en compte l'effet de sillage, la fonction Power correspond à la courbe de puissance de l'éolienne et renvoie une valeur en MW pour une vitesse donnée, $f(dir)$ et $f(v)$ sont respectivement les fréquences d'apparition de la direction et de la vitesse du vent, et $N$ est le nombre total d'éoliennes installées dans le parc considéré. Le facteur $\frac{8760}{10^6}$ permet de convertir la production énergétique annuelle en TWh.
+            </p>
+            <h3 id="subsec-algobb"> L'algorithme itératif classique </h3>
+            <p>
+            L'importance de l'effet de sillage sur la production finale a été montrée. Pour cette raison, une certaine distance est imposée entre plusieurs éoliennes, une zone-tampon. La plupart du temps, une régle dite "communément acceptée" est utilisée, par exemple une distance de 3 fois le diamètre du rotor. 
+            </p>
+            <p>
+            L'algorithme itératif classique pour calculer le potentiel technique est le suivant:
+            
+            <ul>
+                <li> À chaque point est associé un score, qui renseigne sur la qualité du gisement éolien </li>
+                <li> Le "meilleur" point est sélectionné pour y implanter une éolienne </li>
+                <li> Cela définit une zone-tampon circulaire qui retire les points à l'intérieur des points candidats </li>
+                <li> On recommence à l'étape 2 jusqu'à ce qu'il n'y ait plus de points candidats</li>
+            </ul>
+            </p>
+            <div id="image-11" class="image-container">
+                <img src="..\images\saarland-ellipse-filling.png" alt="Layout Saarland">
+                <p class="image-caption">Fig11 : Utilisation de l'algorithme, exemple de l'état fédéral du Saarland </p>
+            </div>
+            <p>
+            Cet algorithme est utilisé dans la litérature presque exclusivement pour déterminer le potentiel technique car il limite l'utilisation de ressources de calcul, un sujet important au vu de l'échelle de l'évaluation. Une variante consiste à remplacer la zone-tampon circulaire par une ellipse dont le grand axe est aligné avec la direction du vent. 
+            </p>
+            <p>
+            Cependant, ce type d'algorithme est loin d'être optimal, car il ne prend pas en compte l'effet de sillage de manière précise. En effet, il suppose que l'installation d'une éolienne retire complètement les points candidats dans une zone-tampon, alors qu'en réalité, l'effet de sillage peut réduire la production énergétique des éoliennes situées en aval sans les rendre complètement inutilisables, en particulier dans les zones avec un gisement éolien de qualité. Cet algorithme peut conduire à une sous-estimation du potentiel technique. 
+            </p>
+            <h3 id="subsec-algogen"> L'algorithme génétique </h3>
+            <p>
+                Pour donner plus de flexibilité au procédé de mitigation de l'effet de sillage, un algorithme peut également directement calculer l'impact et ordonner les éoliennes en fonction. Il s'agit de méthodes méta-heuristiques et elles sont déjà utilisées pour résoudre le problème de type NP difficile que représente l'optimisation d'un plan d'installation d'un parc éolien ("WFLO" dans la littérature). L'algorithme génétique est une de ces méthodes d'optimisation.
+            </p>
+            <div id="image-12" class="image-container">
+                <img src="..\images\scheme-genalgo.png" alt="Algorithme génétique">
+                <p class="image-caption">Fig12 : Schéma de fonctionnement de l'algorithme génétique </p>
+            </div>
+            <ul>
+                <li> On part d'un ensemble aléatoires de dispositions d'éoliennes (="Layouts"). </li>
+                <li> Pour chaque Layout, un score est calculé, il s'agit de la production électrique annuelle qui prend en compte l'effet de sillage, c'est-à-dire l'influence des éoliennes environnantes. L'algorithme cherche à maximiser ce score. Le "meilleur" layout correspond donc à celui présentant la production la plus importante, il est sauvegardé. </li>
+                <li> Les layouts sont mélangés selon plusieurs transformations qui tirent leur inspiration de la sélection naturelle, cela crée de nouveaux layouts.</li>
+                <li> On recommence à l'étape 2 autant de fois que nécessaire. </li>
+            </ul>
+            <p> 
+                Cet algorithme est plus gourmand en ressources de calcul que l'algorithme itératif classique, notamment en raison de l'étape de calcul du score. Il est utilisé dans la littérature à l'échelle locale d'un parc éolien, on essaie dans cette étude d'augmenter cette échelle. 
+            </p>
+
+            <h3 id="subsec-opti"> Optimisation </h3>
+            <p>
+                Pour réduire le temps de calcul, j'ai utilisé plusieurs techniques d'optimisation, notamment:
+                <ul>
+                <li> Le code a été nettoyé, les calculs non-nécessaires enlevés.</li>
+                <li> Le calcul du score a été parallélisé sur plusieurs cœurs de processeur, ce qui permet de réduire considérablement le temps de calcul de l'étape 2. </li>
+                <li> Des heuristiques sont utilisées pour guider la recherche vers des zones plus prometteuses du territoire, par exemple en privilégiant les emplacements avec un gisement éolien de qualité, ou en instaurant une distance maximale de détection pour le calcul de l'effet de sillage. </li>
+                <li> Le module Numba a été utilisé pour compiler le code Python en code machine. En effet, Python n'est pas le langage le plus rapide lorsqu'il s'agit de traiter de l'itératif. Comme montré dans cette étude réalisée par Akcoding (<a href="https://akcoding.com/1-billion-nested-loop-iterations-in-different-languages/">lien de l'étude</a>), Python arrive dernier dans ce test, loin derrière le C/C++. Pour améliorer les performances de Python, il existe néanmoins un module pratique nommé <a href="https://numba.pydata.org/">Numba</a> qui permet, en ajoutant une seule ligne de code, de compiler des fonctions itératives mathématiques en code machine. Cela améliore nettement les performances. </li>
+                </ul>
+            </p>
+            <h2 id="sec-resultats"> Résultats clés </h2>
+
+            Quelques résultats jugés pertinents sont présentés ci-dessous. 
+
+            <h3 id="subsec-vs"> Algorithme classique VS génétique </h3>
+
+            <div id="image-13" class="image-container">
+                <img src="..\images\Saarland-best-spots.png" alt="Ressource éolienne Saarland">
+                <p class="image-caption">Fig13 : Qualité du gisement éolien (paramètre $A$), zones pertinentes dans l'état fédéral du Saarland </p>
+            </div>
+            <div id="image-14" class="image-container">
+                <img src="..\images\saarland38-BB.png" alt="Algorithme itératif">
+                <p class="image-caption">Fig14 : Répartition obtenue avec l'algorithme itératif pour 38 éoliennes, production: 0,435 TWh/an </p>
+            </div>
+            <p> Lorsque l'algorithme itératif classique est utilisé avec sa variante ellipse, on observe sur <a href="#image-14" class="image-ref">le graphe ci-dessus</a> une réparition homogène de 38 éoliennes. </p>
+            <div id="image-15" class="image-container">
+                <img src="..\images\saarland38-gen.png" alt="Algorithme génétique">
+                <p class="image-caption">Fig15 : Répartition obtenue avec l'algorithme génétique pour 38 éoliennes, production: 0,541 TWh/an </p>
+            </div>
+            <p> 
+                Lorsque l'algorithme génétique est utilisé, on observe une répartition plus hétérogène, avec une concentration des 38 éoliennes dans les zones de qualité de gisement éolien élevée, et une plus grande flexibilité dans la mitigation de l'effet de sillage. La production de cette répartition est également meilleure avec une augmentation de 24,4% du KPI.
+            </p>
+            <p> 
+                L'algorithme génétique consomme cependant une importante quantité de ressources processeur. Avec l'ordinateur utilisé pendant ce travail, on observe l'évolution sur la<a href="#image-16" class="image-ref"> figure 16</a> pour la zone étudiée la plus importante en superficie. Dans cette zone, l'algorithme classique propose de placer 1784 éoliennes. On peut observer une absence de convergence après 2000 cycles, 1 cycle durant près de deux minutes. On peut comparer ceci avec la convergence rapide observée pour les 38 éoliennes du Saarland à paramétrage équivalent, voir <a href="#image-17" class="image-ref"> figure 17</a>. 
+            </p>
+            <div id="image-16" class="image-container">
+                <img src="..\images\DE80O-evolution.png" alt="Cycles pour 1784 éoliennes">
+                <p class="image-caption">Fig16 : Évolution du score en fonction des cycles pour 1784 éoliennes </p>
+            </div>
+            <div id="image-15" class="image-container">
+                <img src="..\images\saarland-evolution.png" alt="Cycles pour 38 éoliennes">
+                <p class="image-caption">Fig17 : Évolution du score en fonction des cycles pour 38 éoliennes </p>
+            </div>
+
+            <h3 id="subsec-compac"> Étude de la compacité, un indicateur ? </h3>
+
+            <p> 
+                Le travail de simulation et le temps de calcul associé pour modéliser l'effet de sillage et son impact sont peu adaptés aux calculs à grande échelle. Il est donc intéressant de trouver des indicateurs plus simples, moins rigoureux pour donner un ordre d'idée de cet impact et l'intégrer au calcul. Une idée a été d'étudier la compacité d'une zone, puis de l'associer à l'impact simulé de l'effet de sillage et observer si une corrélation émerge. Une métrique simple pour mesurer la compacité dans la cas d'une grille de points est le ratio entre points internes et total des points, voir <a href="#image-18" class="image-ref"> figure 18</a>.
+            </p>
+            <div id="image-18" class="image-container">
+                <img src="..\images\8neighbors.png" alt="Voisinage et compacité">
+                <p class="image-caption">Fig18 : Compacité et métrique simple </p>
+            </div>
+            <p>
+                L'étude de cas sur les différents cantons de la Bavière montre une corrélation limitée mais existante, avec quelques outliers, voir la <a href="#image-19" class="image-ref">figure 19</a>.
+            </p>
+            <div id="image-19" class="image-container">
+                <img src="..\images\compactness.png" alt="Voisinage et compacité, étude de cas">
+                <p class="image-caption">Fig19 : Corrélation </p>
+            </div>
+
+            <h3 id="subsec-res"> Évaluation du potentiel technique de l'éolien terrestre en Allemagne </h3>
+            <p>
+                En Allemagne, en 2024 <a href="#ref-9" class="citation">[9]</a>:
+                <ul>
+                <li> 28766 éoliennes étaient en opération. </li>
+                <li> La charge totale du réseau était de 462,5 TWh. </li>
+                <li> La production électrique totale était de 431,7 TWh.</li>
+                <li> La production de l'éolien terrestre représentait 26% de cette dernière. </li>
+            </ul>
+            </p>
+            <p>
+                Les résultats de cette étude sont:
+                <ul>
+                <li> Un potentiel technique évalué à 340,8 TWh avec l'algorithme itératif. </li>
+                <li> Un potentiel évalué à la hausse en utilisant l'algorithme génétique, 365.4 TWh, +7.2%. </li>
+                <li> Une répartition de 36725 éoliennes supplémentaires dans le pays.</li>
+                <li> Une répartion majoritairement concentrée dans le Nord-Est du pays, voir <a href="#image-20" class="image-ref">figure 20</a>, notamment en raison d'une plus faible densité de population. </li>
+            </ul>
+            </p>
+            <div id="image-20" class="image-container">
+                <img src="..\images\res.png" alt="Voisinage et compacité, étude de cas">
+                <p class="image-caption">Fig19 : Répartition du potentiel technique </p>
+            </div>
+            <p>
+                Une analyse du potentiel technique futur a également été menée, à horizon 2040. Les designs d'éoliennes les plus récents et les projections quant aux caractéristiques futures ont été utilisées. Pour les données météos, le jeu de données extrapolé du projet QuWind100 a été mis à contribution. On observer une répartition similaire, cependant le potentiel technique a significativement augmenté, passant à 533.8 TWh (version optimisée). Ceci tend à justifier la tendance du "repowering" pour améliorer les performances des parcs éoliens.
+            </p>
+
+            <section class="bibliography">
+                <h2>Sources</h2>
+                <ol>
+                <li id="ref-1">
+                Gouvernement Fédéral d'Allemagne. <a href="https://www.bundesregierung.de/breg-en/service/archive/climate-change-act-2021-1936846">Climate Change Act</a> .
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-2">
+                Gouvernement Fédéral d'Allemagne. <a href="https://www.bundesregierung.de/breg-en/service/archive/kohleausstiegsgesetz-1717014">Coal Exit Law</a> .
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-3">
+                Institut Fraunhofer. <a href="https://www.ise.fraunhofer.de/en/research-projects/ind-e.html">Décarbonation et électrification des activités</a> .
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                </li>
+                <li id="ref-4">
+                Agence Fédérale de l'Environnement. URL: https://www.umweltbundesamt.de/presse/pressemitteilungenuba-prognose-treibhausgasemissionen-sanken-2022-um.
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                </li>
+                <li id="ref-5">
+                Ministère Fédéral de l'Habitat. URL: https://www.bmwsb.bund.de/SharedDocs/gesetzgebungsverfahren/DE/ExterneLinks/wind-an-land-gesetz.html.
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-6">
+                TU Delft et Deutscher Wetterdienst. URL: https://www.dwd.de/DE/klimaumwelt/klimaforschung/klimaueberwachung/quwind100/quwind100_node.html 
+                <a href="#subsec-ressource" class="backlink">↑</a>
+                </li>
+                <li id="ref-7">
+                Barthelmie et al. <em>Modelling the impact of wakes on power output at Nysted and Horns Rev.</em>
+                <a href="#subsec-sillage" class="backlink">↑</a>
+                </li>
+                <li id="ref-8">
+                Ryberg et al. <em>The future of European onshore wind energy potential: Detailed distribution and simulation of advanced turbine designs.</em>
+                <a href="#subsec-eolienne" class="backlink">↑</a>
+                </li>
+                <li id="ref-9">
+                Deutsche Windguard <em>Status of Onshore Wind Energy Development in Germany.</em>
+                <a href="#subsec-res" class="backlink">↑</a>
+                </li>
+                
+            </ol>
+            </section>
+            
+
+        </article>
+    </main>
+
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Audren Cau </p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="Latin-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projets</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">Projets</h1>
+            <p class="tagline">Mis à jour: 20/04/2026</p>
+        </div>
+    </header>
+
+    <nav class="category-nav">
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-category="articles">
+                    <span class="tab-icon">📄</span>
+                    
+                </button>
+                <button class="nav-tab" data-category="about">
+                    <span class="tab-icon">👤</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <br/>
+        <section class="articles" id="articles-section">
+
+            <article class="article-card">
+                <a href="articles/assessment-technical-potential.html" class="article-link">
+                    <div class="article-image">
+                        <img src="images/minia-wind-thesis.png" alt="Wind turbines">
+                    </div>
+                    <div class="article-content">
+                        <h2>Potentiel technique présent et futur de l'éolien terrestre en Allemagne</h2>
+                        <p class="article-excerpt"> Analyse stratégique du gisement éolien terrestre du pays dans le cadre de sa transition
+énergétique.</p>
+                        <span class="read-more">Lire plus →</span>
+                    </div>
+                </a>
+            </article>
+                <br/>
+            <article class="article-card">
+                <a href="articles/heat-pump-tool.html" class="article-link">
+                    <div class="article-image">
+                        <img src="images/minia-heat-pump.png" alt="Heat pumps">
+                    </div>
+                    <div class="article-content">
+                        <h2>Performances annuelles des pompes à chaleur en logement collectif</h2>
+                        <p class="article-excerpt"> Conception et déploiement d'un outil Excel d'analyse technique et économique des pompes à
+chaleur (PAC) en habitat collectif.</p>
+                        <span class="read-more">Lire plus →</span>
+                    </div>
+                </a>
+            </article>
+
+        </section>
+        <br/>
+
+        <section class="about-section" id="about-section" style="display: none;">
+            <div class="about-content">
+                <br>
+                <h2>À propos de moi</h2>
+                <p>
+                    Passionné par les énergies renouvelables et l'optimisation des systèmes énergétiques, je partage sur ce site 
+                    mes projets dans le domaine de la transition énergétique.
+                </p>
+                
+                <h3>Mon parcours</h3>
+                <p>
+                    Avec une formation en ingénierie généraliste à dominante énergétique, j'ai travaillé sur divers projets 
+                    concernant les énergies renouvelables, l'efficacité énergétique et la modélisation de systèmes complexes. 
+                    Je suis particulièrement intéressé par l'analyse stratégique et les outils de simulation.
+                </p>
+
+                <h3>Mes domaines privilégiés</h3>
+                <ul>
+                    <li><strong>Énergies renouvelables :</strong> Éolien terrestre et maritime, solaire photovoltaïque</li>
+                    <li><strong>Efficacité énergétique :</strong> Pompes à chaleur, isolation thermique, systèmes de chauffage et climatisation</li>
+                    <li><strong>Modélisation :</strong> Analyse technique, dimensionnement de systèmes</li>
+                    <li><strong>Outils :</strong> Excel avancé, Python, analyse de données</li>
+                    <li><strong>Animation et promotion :</strong> Rapports, visuels Power BI, présentations</li>
+                </ul>
+
+                <h3>Sur ce site</h3>
+                <p>
+                    Vous trouverez des résumés de mes projets avec une description illustrée et une présentation des éléments clés.
+                </p>
+
+                <h3>Contact</h3>
+                <p>
+                    N'hésitez pas à me contacter via LinkedIn ou mail (audren.cau@gmail.com) pour toute question, suggestion, ou pour des collaborations professionnelles.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <section class="linkedin-section">
+        <div class="container">
+            <div class="linkedin-content">
+                <div class="linkedin-logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+                    </svg>
+                </div>
+                <a href="https://linkedin.com/in/audren-cau" target="_blank" rel="noopener noreferrer" class="linkedin-name">Audren Cau</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Audren Cau</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.counter.dev/script.js" data-id="0ac68c08-6379-486b-b2d6-1ef7267fb8ab" data-utcoffset="2"></script>
+
+    <script>
+        // Category navigation toggle
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                
+                // Remove active class from all tabs
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.getElementById('articles-section').style.display = 'none';
+                document.getElementById('about-section').style.display = 'none';
+                
+                // Show selected section
+                if (category === 'articles') {
+                    document.getElementById('articles-section').style.display = 'block';
+                } else if (category === 'about') {
+                    document.getElementById('about-section').style.display = 'block';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

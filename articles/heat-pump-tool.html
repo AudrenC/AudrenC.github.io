@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="Latin-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évaluation de la performance annuelle des pompes à chaleur en logement collectif</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">Focus</h1>
+            <p class="tagline"></p>
+        </div>
+    </header>
+
+    <main class="article-page">
+        <a href="../index.html" class="back-link">← Retour à la liste des projets </a>
+
+        <article class="article-header">
+            <h1>Évaluation de la performance annuelle des pompes à chaleur en logement collectif</h1>
+            <div class="article-meta">
+                <span class="article-meta-item">🏙️ Pouget Consultants, Paris</span>
+                <span class="article-meta-item">⚙️ Excel, Pléiades, Thermodynamique</span>
+            </div>
+            <img src="..\images\close-up-heat-pump-outside-home.jpg" alt="Heat pump" class="article-featured-image">
+        </article>
+
+        <nav class="table-of-contents">
+            <h3> SOMMAIRE </h3>
+                <ul>
+                    <li class="toc-level-2"><a href="#sec-contexte">Contexte</a></li>
+                    <li class="toc-level-2"><a href="#sec-pac">La pompe à chaleur en bref</a></li>
+                    <li class="toc-level-2"><a href="#sec-apports">Modéliser les apports solaires et internes </a></li>
+                    <ul>
+                        <li class="toc-level-3"><a href="#subsec-pleiades">Utilisation du la suite Pléiades</a></li>
+                        <li class="toc-level-3"><a href="#subsec-loi">Décalage de la loi d'eau</a></li>
+                        <li class="toc-level-3"><a href="#subsec-comp">Comparaison</a></li>
+                    </ul>
+                    <li class="toc-level-2"><a href="#sec-nav">Naviguation dans l'outil</a></li>
+                    <li class="toc-level-2"><a href="#sec-etude">Étude de cas - Quelques résultats</a></li>
+                    <ul>
+                        <li class="toc-level-3"><a href="#subsec-scenario">Hypothèses</a></li>
+                        <li class="toc-level-3"><a href="#subsec-temp">Régime de température</a></li>
+                        <li class="toc-level-3"><a href="#subsec-effi">Efficacité</a></li>
+                    </ul>
+
+                    <li class="toc-level-2"><a href="#sec-biblio">Sources</a></li>
+                </ul>
+        </nav>
+
+        <article class="article-body">
+
+            <h2 id="sec-contexte">Contexte</h2>
+            <p>
+                Le marché du chauffage subi de profondes mutations, dynamisé par les réglementations qui prennent en compte les enjeux environnementaux. Depuis la signature du "Green Deal" <a href="#ref-1" class="citation">[1]</a>, l'Union Européenne s'est engagée à atteindre la neutralité carbone en 2050. La France a confirmé cet objectif avec la Stratégie Nationale Bas-Carbone (SNBC). Or, le secteur du bâtiment génère à lui seul un cinquième des émissions de gaz à effet de serre (EGES) du pays <a href="#ref-2" class="citation">[2]</a>. Les réglementations successives, RT2005, RT2012 et RE2020, visent à encadrer le secteur du bâtiment et à l'orienter vers la décarbonation.
+            </p>
+            <p> 
+                Une grande nouveauté de la RE2020 (Réglementation Environnementale) est l'évaluation complète (Scopes 1, 2 et 3) des EGES des énergies consommées pendant le fonctionnement du bâtiment <a href="#ref-3" class="citation">[3]</a>. Ce nouvel indicateur, nommé <em>ICénergie</em>, doit respecter une valeur maximale qui, en pratique, rend impossible l'utilisation de chaudières à gaz ou fioul dans une maison individuelle. Dans le logement collectif, les solutions 100% fossiles sont également proscrites dans le neuf depuis 2025. Par conséquent, les pompes à chaleur (PAC) sont devenues une solution de chauffage privilégiée pour les constructions neuves. 
+            </p>
+            <p>
+                En France, ces différents facteurs sont favorables à la PAC :
+                <ul>
+                    <li> Un mix électrique faiblement carboné grâce à une base nucléaire et hydraulique. </li>
+                    <li> La fluctuation croissante et l'augmentation des prix des ressources fossiles, notamment en fonction des événements géopolitiques à l'international.</li>
+                    <li> Une politique importante d'aides et crédits d'impôts mis en place par l'État.</li>
+                </ul>
+            </p>
+            <p> 
+                Le marché de la PAC a connu une croissance importante, avec un pic atteint en 2023 <a href="#ref-4" class="citation">[4]</a>. Cependant, le ralentissement généralisé de la construction neuve amène les différents acteurs à investir le secteur de la rénovation, qui représente un potentiel de marché plus important. En effet, les bâtiments résidentiels représentent 77% de la surface tertiaire, dont la majorité a été construite avant 1975 <a href="#ref-5" class="citation">[5]</a>. Par conséquent, la rénovation énergétique des bâtiments résidentiels est un enjeu majeur.
+            </p>
+            <p>
+                Toutefois, la performance des PAC en rénovation est plus incertaine que dans le neuf, en raison de la diversité des configurations et des conditions d'installation. En particulier, les installations énergétiques dans le logement collectif ancien compensent parfois une isolation limitée et un réseau hydraulique peu efficace. Cela se traduit par une production d'eau à très haute température (90°C), un régime qui n'est pas favorable à la PAC. De plus, les performances annoncées par les fabricants sont souvent basées sur des conditions de test idéales, qui ne reflètent pas toujours les conditions réelles d'utilisation. Par conséquent, il est essentiel d'évaluer la performance annuelle des PAC en logement collectif pour mieux comprendre leur efficacité et leur impact environnemental dans le contexte de la rénovation énergétique.
+            </p>
+            <p> 
+                C'est dans ce cadre que j'ai travaillé sur l'élaboration d'un outil Excel qui prend en compte les designs de PAC les plus courants ainsi que les différentes configurations de bâtiments résidentiels pour produire des chiffre-clés sur la performance annuelle des PAC. Cet outil permet d'évaluer les économies d'énergie, les émissions de gaz à effet de serre évitées et les coûts associés à l'exploitation des PAC dans différents scénarios de rénovation. 
+
+            </p>
+
+            <h2 id="sec-pac">La pompe à chaleur en bref</h2>
+
+            <p>
+                La PAC est un système thermodynamique qui transfère la chaleur d'une source froide vers une source chaude. La base de ce système est composée de 4 éléments : un condenseur, un évaporateur, un compresseur et un détendeur. Un fluide frigorigène subit de façon cyclique différentes transformations lors de son passage dans les éléments composant la PAC. 
+            </p>
+            <div id="image-1" class="image-container">
+                <img src="..\images\pac-principe.png" alt="principe d'une PAC">
+                <p class="image-caption">Fig1: Principe schématique de fonctionnement d'une PAC <a href="#ref-6" class="citation">[6]</a>  </p>
+            </div>
+            <p>
+                L'extérieur est la source froide et le système de chauffage de la maison est la source chaude. Le fluide va récupérer de l'énergie au contact de la source froide en s'évaporant (transformation endothermique) et la restituer à la source chaude en se condensant (transformation exothermique). 
+            </p>
+            <p>
+                On range les PAC selon les sources froides et chaudes qu'elles utilisent. Ainsi, une PAC air/eau utilise l'air environnant comme source froide et l'eau du réseau hydraulique d'un logement comme source chaude.
+            </p>
+            <p>
+                Quelques critères de performance sont à prendre en compte pour évaluer une PAC :
+                <ul>
+                    <li> <b>Le coefficient de performance (COP)</b> : c'est le rapport entre l'énergie thermique produite et l'énergie électrique consommée. Un COP plus élevé indique une meilleure efficacité énergétique. </li>
+                    <li> <b>Le coefficient de performance saisonnier (SCOP)</b> : c'est le COP mais évalué sur une année complète de fonctionnement. </li>
+                    <li> <b>La température de fonctionnement</b> : les PAC sont plus efficaces à des températures de fonctionnement plus basses. Par conséquent, les PAC sont généralement plus performantes dans les systèmes de chauffage à basse température, comme les planchers chauffants, que dans les systèmes à haute température, comme les radiateurs traditionnels.</li>
+                    <li> <b>Le taux de couverture</b> : la part des besoins d'un bâtiment couverts par l'appareil seul.</li>
+                    <li> <b>La monotone de puissance</b> : visualisation graphiques des besoins thermiques et de leur couverture par la PAC et/ou un éventuel appoint.</li>
+                </ul>
+            </p>
+            <p>
+                La principale limitation d'une PAC vient de son compresseur. Lorsque l'écart en température entre la source froide et la source chaude est trop important, le compresseur doit fournir plus d'effort pour transférer la chaleur, ce qui réduit le COP de l'appareil. Une température de fonctionnement élevée, comme c'est souvent le cas dans les systèmes de chauffage à haute température, peut donc entraîner une baisse significative de la performance d'une PAC. Les conditions climatiques peuvent également affecter la performance d'une PAC, en particulier pour les modèles air/eau, puisqu'elles dépendent de la température extérieure. Les PAC sont ainsi moins performantes lorsqu'il fait froid, ce qui requiert l'usage d'un chauffage d'appoint.
+            </p>
+            <p> 
+                Dans le logement collectif, les PAC hybrides sont utilisées pour compenser les limitations des PAC classiques. Ces systèmes combinent une PAC avec une chaudière à gaz, permettant ainsi de maintenir une température de fonctionnement plus basse et d'améliorer l'efficacité globale. Cependant, l'utilisation de PAC hybrides peut entraîner des coûts d'installation et d'exploitation plus élevés, ainsi que des émissions de gaz à effet de serre plus importantes.
+            </p>
+
+            <h2 id="sec-apports">Modéliser les apports solaires et internes </h2>
+
+            Les besoins thermiques d'un bâtiment correspondent à la différence entre les pertes thermiques et les apports solaires et internes. Les pertes thermiques sont liées à l'isolation du bâtiment, tandis que les apports thermiques proviennent de sources internes (occupants, appareils électriques) et externes (soleil). Les apports solaires et internes peuvent réduire les besoins de chauffage d'un bâtiment, mais ils peuvent aussi entraîner des surchauffes en été. Par conséquent, il est essentiel de modéliser ces apports pour évaluer la performance d'une PAC dans différentes conditions.
+
+            <h3 id="subsec-pleiades"> Utilisation du la suite Pléiades </h3>
+            <p>
+                Pléiades&copy; est une suite logicielle de simulation thermique dynamique développée par l'entreprise IZUBA Énergies. Elle permet de modéliser les performances énergétiques d'un bâtiment en prenant en compte les apports solaires et internes, ainsi que les conditions climatiques. Le logiciel utilise des données météorologiques issus du pack Meteonorm. Cette suite logicielle est fiable et reconnue dans le domaine. Je l'ai utilisée pour modéliser les apports solaires et internes d'un bâtiment résidentiel typique, en fonction de différentes configurations d'isolation et de systèmes de chauffage. Les résultats de ces simulations ont été intégrés dans l'outil Excel pour évaluer la performance annuelle des PAC dans différents scénarios de rénovation.
+            <h3 id="subsec-loi"> Décalage de la loi d'eau </h3>
+            <p>
+                La solution précédente étant complexe et coûteuse en temps et ressources, une alternative moins rigoureuse mais plus simple a également été implémentée, basée sur le décalage de la loi d'eau. 
+                <div id="image-2" class="image-container">
+                    <img src="..\images\visu-loi-eau.png" alt="Loi d'eau décalée">
+                    <p class="image-caption">Fig2: Principe du décalage de la loi d'eau </a>  </p>
+                </div>
+                
+                La loi d'eau est une relation qui définit la température de l'eau de chauffage en fonction de la température extérieure. Elle est utilisée pour réguler le fonctionnement d'une PAC et optimiser son efficacité. Un décalage de la loi d'eau consiste à ajuster cette relation pour compenser les variations des apports solaires et internes, afin de maintenir une température de fonctionnement optimale pour la PAC. Par exemple, si les apports solaires sont élevés, la température de l'eau de chauffage peut être réduite pour éviter les surchauffes et améliorer le COP de la PAC. Sur la  <a href="#image-2" class="image-ref">figure 2</a>, la loi d'eau est faiblement décalée car le bâtiment simulé est ancien et peu isolé, ce qui limite les apports solaires et internes. En revanche, la loi d'eau serait fortement décalée pour le bâtiment neuf, voire passif.
+
+
+            <h2 id="sec-nav">Naviguation dans l'outil </h2>
+
+            <p>
+                Section en cours de développement. Github héberge des sites statiques, ce qui rend difficile l'intégration d'un outil interactif. 
+            </p>
+
+            <h2 id="sec-etude"> Étude de cas - Quelques résultats </h2>
+
+            <h3 id="subsec-scenario"> Hypothèses </h3>
+
+                On utilise le scénario suivant dans cette étude de cas :
+                <ul>
+                    <li> Le bâtiment est situé dans la zone climatique H1a (Ex: Paris). Température de référence (Tréf): -7°C. </li>
+                    <li> Les déperditions thermiques du bâtiment à Tréf ont été mesurées à 330 kW. </li>
+                    <li> L'installation de chauffage est prévue pour une production d'eau à 70°C à Tréf. </li>
+                    <li> Le bâtiment a une surface habitable (SHAB) de 7500 m².</li>
+                    <li> On souhaite installer des PAC Elco Aerotop L079 (&copy;Elco) avec pour caractéristiques : une puissance à Tréf de 62 kW et une température maximale de production de 55°C.</li>
+                    <li> Le système fonctionne en hybride simultané. Lorsque la PAC ne suffit plus à couvrir les besoins, l'appoint gaz compense. </li>
+                    <li> 2 PAC sont installées initialement. </li>
+                </ul>
+            <h3 id="subsec-comp"> Avec et sans apports solaires et internes </h3>
+
+                <div id="image-3" class="image-container">
+                    <img src="..\images\mon-sans.png" alt="Monotone sans apports">
+                    <p class="image-caption">Fig3: Monotone de puissance SANS apports solaires et internes </a>  </p>
+                </div>
+                <div id="image-4" class="image-container">
+                    <img src="..\images\mon-avec.png" alt="Monotone avec apports">
+                    <p class="image-caption">Fig4: Monotone de puissance AVEC apports solaires et internes </a>  </p>
+                </div>
+                <p>
+                    On observe que:
+                <ul>
+                    <li>Les apports solaires et internes réduisent significativement les besoins de chauffage estimés de façon statique. Cela souligne à la fois l'importance du travail de modélisation mais aussi l'intérêt de la rénovation dans le cadre de la sobriété énergétique. Un bâtiment qui prend mieux en compte les principes de la conception bioclimatique améliore significativement ses performances.</li>
+                    <li> L'appoint (en jaune) est utilisé de manière conséquente. Lors des heures les plus froides, on observe également que les PAC sont coupées complétement et l'appoint assure seul la couverture des besoins. Cela est dû à la température maximale de production à 55°C du modèle de PAC choisi, qui ne coïncide pas avec le régime d'eau à 70°C prévu pour l'installation de chauffage du bâtiment. </li>
+                </ul>
+                </p>
+            <h3 id="subsec-temp"> Régime de température </h3>
+
+                <p> 
+                    On a vu que le régime de température du bâtiment n'est pas tout à fait adapté au modèle de PAC. Lors d'un projet de rénovation, une meilleure isolation, une refonte de l'installation de chauffage ou encore approche plus bioclimatique permettent de diminuer ce régime. On observe dans cette section l'influence de ce dernier sur les performances annuelles des PAC. 
+                </p>
+                <div id="image-5" class="image-container">
+                    <img src="..\images\scop-regime.png" alt="Régime de température">
+                    <p class="image-caption">Fig5: Régime de température et SCOP </a>  </p>
+                </div>
+                <p>
+                    Le <a href="#image-5" class="image-ref">SCOP</a> est plus élevé pour les régimes de température plus bas, ce qui confirme que les PAC sont plus efficaces dans les systèmes de chauffage à basse température. On peut également s'intéresser aux autres indicateurs de performance, voir le <a href="#image-6" class="image-ref">tableau ci-dessous</a>.
+                    <div id="image-6" class="image-container">
+                    <img src="..\images\regime-autres.png" alt="Régime de température et indicateurs">
+                    <p class="image-caption">Fig6: Autres indicateurs </a>  </p>
+                    </div>
+                    Si le taux de couverture est stable, on observe une amélioration significative du coefficient d'énergie primaire (CEP) et des EGES à mesure que la température de fonctionnement diminue. Cela souligne l'importance de réduire le régime de température du bâtiment pour maximiser les bénéfices environnementaux et économiques des PAC.
+                </p>
+
+            <h3 id="subsec-effi"> Dimensionnement </h3>
+
+                <p>
+                    On s'intéresse maintenant à la puissance de la PAC et à son influence sur les performances annuelles. Pour cela, les différents indicateurs de performance sont évalués pour les différentes PAC de la gamme Elco Aerotop L, voir le <a href="#image-7" class="image-ref">tableau ci-dessous</a>.
+                    <div id="image-7" class="image-container">
+                    <img src="..\images\dimensionnement.png" alt="Dimensionnement">
+                    <p class="image-caption">Fig7: Dimensionnement et indicateurs </a>  </p>
+                    </div>
+                    On observe que les indicateurs clés s'améliorent à mesure que la puissance de la PAC augmente. Cependant, il est également important de prendre en compte les coûts d'installation et d'exploitation associés à des PAC plus puissantes, ainsi que les contraintes techniques et spatiales du bâtiment. On peut noter qu'un taux de couverture à Tréf de 30% (PAC L065) implique un taux de couverture annuelle de 80%, ce qui peut constituer un bon compromis entre performance et coût.
+                </p>
+
+
+            <section class="bibliography">
+                <h2>Sources</h2>
+                <ol>
+                <li id="ref-1">
+                Union Européenne. <a href="https://commission.europa.eu/strategy-and-policy/priorities-2019-2024/european-green-deal_fr">Green Deal</a> .
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-2">
+                Ministère de la transition écologique. <a href="https://www.ecologie.gouv.fr/sites/default/files/documents/23064_decarbonation-batiment.pdf">Décarbonation des bâtiments</a> .
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-3">
+                Guide Cerema [RE2020]. Version 09/2023. <a href="https://www.cerema.fr/fr/actualites/guide-re2020-version-092023">Guide RE2020</a>.
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-4">
+                Commissariat général au développement durable. <a href="https://www.statistiques.developpement-durable.gouv.fr/edition-numerique/chiffres-cles-energies-renouvelables/fr/17-pompes-a-chaleur-">Chiffres clés - Énergies renouvelables </a>.
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-5">
+                INSEE. <em>Les conditions de logement en France, édition 2017.</em>
+                <a href="#sec-contexte" class="backlink">↑</a>
+                </li>
+                <li id="ref-6">
+                Charbel Rahhal. <em>Conception d'une pompe à chaleur air/eau à haute efficacité énergétique pour la
+réhabilitation d'installations de chauffage existantes.</em> Thèse de doctorat, Mines de Paris, 2006.
+                <a href="#sec-pac" class="backlink">↑</a>
+                </li>
+
+                </ol>
+            </section>
+
+
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Audren Cau </p>
+        </div>
+    </footer>
+</body>
+</html>
