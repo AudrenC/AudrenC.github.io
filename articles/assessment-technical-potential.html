@@ -184,7 +184,7 @@
             <h3 id="subsec-grille">Création de la base de données </h3>
 
             <p> 
-                Les données géospatiales à ma disposition sont des polygones vectorisés, difficiles à manipuler pour faire du calcul de potentiel énergétique. J'ai donc dû les convertir en une grille régulière de points, chacun représentant un emplacement potentiel pour une éolienne. À chaque point sont associées la longitude et la latitude, ainsi que les différentes caractéristiques du site (vitesse du vent, altitude, etc.) extraites du jeu de données QuWind100. J'ai utilisé la bibliothèque Python GeoPandas pour effectuer cette conversion et manipuler les données géospatiales. En utilisant également une extension PostGIS pour stocker des données géospatiales et effectuer des requêtes type SQL, j'ai pu créer une base de données relationnelle qui facilite l'accès et l'analyse des données. Cette <a href="#image-3" class="image-ref">base de données</a> a été utilisée pour simuler l'installation de parcs éoliens dans les zones identifiées. En effet, elle est ensuite manipulable par Python, ce qui est utile pour la répartition des éoliennes et le calcul de la production énergétique.
+                Les données géospatiales à ma disposition sont des polygones vectorisés, difficiles à manipuler pour faire du calcul de potentiel énergétique. J'ai donc dû les convertir en une grille régulière de points, chacun représentant un emplacement potentiel pour une éolienne. À chaque point sont associées la longitude et la latitude, ainsi que les différentes caractéristiques du site (vitesse du vent, altitude, etc.) extraites du jeu de données QuWind100. J'ai utilisé la bibliothèque Python GeoPandas pour effectuer cette conversion et manipuler les données géospatiales. En utilisant également une extension PostGIS pour stocker des données géospatiales et effectuer des requêtes type SQL, j'ai pu créer une base de données relationnelle qui facilite l'accès et l'analyse des données. Cette <a href="#image-6" class="image-ref">base de données</a> a été utilisée pour simuler l'installation de parcs éoliens dans les zones identifiées. En effet, elle est ensuite manipulable par Python, ce qui est utile pour la répartition des éoliennes et le calcul de la production énergétique.
                 <div id="image-6" class="image-container">
                 <img src="..\images\database.png" alt="base de données">
                 <p class="image-caption">Fig6 : Échantillon de la base de données, avec coordonées spatiales et coefficients d'intérêt à différentes altitudes  </p>
@@ -313,7 +313,7 @@
                 <img src="..\images\DE80O-evolution.png" alt="Cycles pour 1784 éoliennes">
                 <p class="image-caption">Fig16 : Évolution du score en fonction des cycles pour 1784 éoliennes </p>
             </div>
-            <div id="image-15" class="image-container">
+            <div id="image-17" class="image-container">
                 <img src="..\images\saarland-evolution.png" alt="Cycles pour 38 éoliennes">
                 <p class="image-caption">Fig17 : Évolution du score en fonction des cycles pour 38 éoliennes </p>
             </div>
@@ -363,7 +363,7 @@
             </p>
 
             <section class="bibliography">
-                <h2>Sources</h2>
+                <h2 id="sec-biblio"> Sources </h2>
                 <ol>
                 <li id="ref-1">
                 Gouvernement Fédéral d'Allemagne. <a href="https://www.bundesregierung.de/breg-en/service/archive/climate-change-act-2021-1936846">Climate Change Act</a> .
